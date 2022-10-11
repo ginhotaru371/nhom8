@@ -103,12 +103,22 @@ class Fighter extends Sprite {
     this.draw()
     if (!this.dead) this.animateFrames()
 
+    // attack boxes
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x
     this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+
+    // draw the attack box
+    // c.fillRect(
+    //   this.attackBox.position.x,
+    //   this.attackBox.position.y,
+    //   this.attackBox.width,
+    //   this.attackBox.height
+    // )
 
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
+    // gravity function
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0
       this.position.y = 330
@@ -117,6 +127,10 @@ class Fighter extends Sprite {
 
   attack() {
     this.switchSprite('attack1')
+    this.isAttacking = true
+  }
+  attack2() {
+    this.switchSprite('attack2')
     this.isAttacking = true
   }
 
@@ -135,12 +149,19 @@ class Fighter extends Sprite {
       return
     }
 
+    // overriding all other animations with the attack animation
     if (
       this.image === this.sprites.attack1.image &&
       this.framesCurrent < this.sprites.attack1.framesMax - 1
     )
       return
+    if (
+      this.image === this.sprites.attack2.image &&
+      this.framesCurrent < this.sprites.attack2.framesMax - 1
+    )
+      return
 
+    // override when fighter gets hit
     if (
       this.image === this.sprites.takeHit.image &&
       this.framesCurrent < this.sprites.takeHit.framesMax - 1
@@ -182,6 +203,14 @@ class Fighter extends Sprite {
         if (this.image !== this.sprites.attack1.image) {
           this.image = this.sprites.attack1.image
           this.framesMax = this.sprites.attack1.framesMax
+          this.framesCurrent = 0
+        }
+        break
+
+     case 'attack2':
+        if (this.image !== this.sprites.attack2.image) {
+          this.image = this.sprites.attack2.image
+          this.framesMax = this.sprites.attack2.framesMax
           this.framesCurrent = 0
         }
         break
